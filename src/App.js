@@ -11,6 +11,7 @@ class App extends Component {
 
   state = {
     data: [],
+    renderedData: [],
     modal: {
       isOpen: false,
       data: {
@@ -30,7 +31,8 @@ class App extends Component {
     await getDataUser();
     const { dataUsers } = this.props;
     this.setState({
-      data: dataUsers
+      data: dataUsers,
+      renderedData: dataUsers
     })
   }
 
@@ -63,15 +65,29 @@ class App extends Component {
     })
   }
 
+  handleSearch = (e) => {
+    const { value } = e.target;
+    const { data } = this.state;
+    const searchName = data.filter((item) => item.name.match(new RegExp(value, 'ig')));
+    const searchPhone = data.filter((item) => item.phone.match(new RegExp(value, 'ig')));
+    const ids = new Set(searchName.map(item => item.phone));
+    const merged = [...searchName, ...searchPhone.filter(item => !ids.has(item.phone))];
+    this.setState(prevState => ({
+      ...prevState,
+      renderedData: merged
+    }));
+  }
+
   render() {
-    const { data, modal } = this.state;
+    const { modal, renderedData } = this.state;
     const tableHead = ['Nama', 'No Telp', 'Action'];
     return (
       <>
         <Home
           tableHead={tableHead}
-          tableBody={data}
+          tableBody={renderedData}
           handleOpen={this.handleOpen}
+          handleOnSearch={this.handleSearch}
         />
         <Modal
           open={modal.isOpen}

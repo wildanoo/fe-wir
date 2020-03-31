@@ -3,30 +3,45 @@ import {
   AppBar,
   Paper,
   Toolbar,
-  Typography
+  Typography,
+  InputBase,
+  IconButton
 } from '@material-ui/core/';
 import { withStyles } from '@material-ui/core/styles';
 import styles from './styles';
 import Table from '../table/table';
+import SearchIcon from '@material-ui/icons/Search';
+
 
 const Home = (props) => {
   const {
     classes,
     tableHead,
     tableBody,
-    handleOpen
+    handleOpen,
+    handleOnSearch
   } = props;
 
   return (
     <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="title" color="inherit">
+            Contact List
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Paper style={{ display: 'flex', backgroundColor: '#f4f4f4', borderRadius: 30 }}>
+        <IconButton disabled={true}>
+          <SearchIcon />
+        </IconButton>
+        <InputBase
+          fullWidth
+          placeholder="Search contact..."
+          onChange={handleOnSearch}
+        />
+      </Paper>
       <Paper elevation={3}>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="title" color="inherit">
-              Contact List
-            </Typography>
-          </Toolbar>
-        </AppBar>
         <Table 
           tableHead={tableHead}
           tableBody={tableBody}
